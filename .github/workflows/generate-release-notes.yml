@@ -5,7 +5,7 @@ permissions:
 
 on:
   push:
-    branches: [ main ]
+    branches: [ add-release-notes,main ]
   pull_request:
     types: [closed]
 

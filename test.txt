@@ -1,1 +1,1 @@
-Test commit for release notes
+Test commit for release notes to check if it generates the release note
