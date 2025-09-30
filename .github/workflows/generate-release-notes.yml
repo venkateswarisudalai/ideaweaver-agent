@@ -5,7 +5,7 @@ permissions:
 
 on:
   push:
-    branches: [ add-release-notes,main ]
+    branches: [ add-release-notes, main ]
   pull_request:
     types: [closed]
 
@@ -15,37 +15,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      # 2️⃣ Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests python-dotenv
 
-      - name: Fetch commits & PRs
+      # 4️⃣ Run combined release notes generator
+      - name: Generate release notes
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REF: ${{ github.ref }}
-        run: |
-          python scripts/fetch_commits_prs.py
-          head -n 50 messages.txt || true
-
-      - name: Generate release notes
-        env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          python scripts/generate_release_notes_pr.py
+          python scripts/release_notes_generator.py
           head -n 50 RELEASE_NOTES.md || true
 
+      # 5️⃣ Commit and push release notes
       - name: Commit release notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
