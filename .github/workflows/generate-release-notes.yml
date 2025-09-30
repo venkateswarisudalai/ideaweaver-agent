@@ -43,7 +43,7 @@ jobs:
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          python scripts/generate_release_notes.py
+          python scripts/generate_release_notes_pr.py
           head -n 50 RELEASE_NOTES.md || true
 
       - name: Commit release notes
